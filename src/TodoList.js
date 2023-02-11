@@ -1,10 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FiEdit } from "react-icons/fi";
 import { BsTrashFill } from "react-icons/bs";
 import Alert from "./Alert";
 
+const getLocalItems = () => {
+  let lists = localStorage.getItem("todos");
+  if (lists) {
+    return JSON.parse(localStorage.getItem("todos"));
+  } else {
+    return [];
+  }
+};
+
 const TodoList = () => {
-  const [list, setList] = useState([]);
+  const [list, setList] = useState(getLocalItems());
   const [alert, setAlert] = useState({ status: false, message: "", type: "" });
 
   const [message, setMessage] = useState({
@@ -104,6 +113,10 @@ const TodoList = () => {
     setAlert({ status: true, message: "Items Deleted", type: "danger" });
     setList([]);
   };
+
+  useEffect(() => {
+    localStorage.setItem("todos", JSON.stringify(list));
+  }, [list]);
 
   return (
     <main className="section">
